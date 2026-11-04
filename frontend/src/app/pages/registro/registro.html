@@ -1,0 +1,39 @@
+<form [formGroup]="formulario" (ngSubmit)="registrar()">
+    <div>
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" formControlName="nombre">
+    </div>
+    <div>
+        <label for="apellido">Apellido</label>
+        <input id="apellido" type="text" formControlName="apellido">
+    </div>
+    <div>
+        <label for="nombreUsuario">Nombre de usuario</label>
+        <input id="nombreUsuario" type="text" formControlName="nombreUsuario">
+    </div>
+    <div>
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" formControlName="email">
+    </div>
+    <div>
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" formControlName="password">
+    </div>
+    <div>
+        <label for="repetirPassword">Repetir contraseña</label>
+        <input id="repetirPassword" type="password" formControlName="repetirPassword">
+    </div>
+    <div>
+        <label for="fechaNacimiento">Fecha de nacimiento</label>
+        <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento">
+    </div>
+    <div>
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" formControlName="descripcion"></textarea>
+    </div>
+    <div>
+        <label for="fotoPerfil">Foto de perfil</label>
+        <input id="fotoPerfil" type="file" accept="image/jpeg,image/png,image/webp" (change)="seleccionarFoto($event)">
+    </div>
+    <button type="submit">Registrarse</button>
+</form>
