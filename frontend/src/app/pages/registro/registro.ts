@@ -2,27 +2,34 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Modal } from '../../shared/modal/modal';
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Modal],
   selector: 'app-registro',
   styleUrl: './registro.scss',
   templateUrl: './registro.html',
 })
 export class Registro {
   fotoSeleccionada: File | null = null;
+  intentoRegistro = false;
+  formularioEnviado = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   formulario = new FormGroup({
     nombre: new FormControl('', Validators.required),
     apellido: new FormControl('', Validators.required),
     nombreUsuario: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email,
+      Validators.pattern(/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/)
+    ]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(8),
-      Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9]).*$/),
+      Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9]).*$/)
     ]),
     repetirPassword: new FormControl('', Validators.required),
     fechaNacimiento: new FormControl('', Validators.required),
@@ -32,11 +39,14 @@ export class Registro {
   seleccionarFoto(evento: Event) {
     const input = evento.target as HTMLInputElement;
     const archivo = input.files?.[0];
-
     this.fotoSeleccionada = archivo ?? null;
   }
 
   registrar() {
+    this.formularioEnviado = true;
+
+    console.log('Estado del formulario:', this.formulario.status, this.formulario.value);
+
     if (this.formulario.invalid) {
       this.formulario.markAllAsTouched();
       return;
@@ -53,7 +63,6 @@ export class Registro {
     }
 
     const datos = new FormData();
-
     datos.append('nombre', this.formulario.value.nombre ?? '');
     datos.append('apellido', this.formulario.value.apellido ?? '');
     datos.append('nombreUsuario', this.formulario.value.nombreUsuario ?? '');
@@ -67,9 +76,10 @@ export class Registro {
     this.http.post('http://localhost:3000/autenticacion/registro', datos)
       .subscribe({
         next: () => {
-          alert('Usuario registrado correctamente');
+          this.intentoRegistro = true;
           this.formulario.reset();
           this.fotoSeleccionada = null;
+          this.formularioEnviado = false;
         },
         error: (error) => {
           console.error('Error al registrar usuario:', error);
