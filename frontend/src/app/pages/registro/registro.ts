@@ -2,10 +2,12 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 import { Modal } from '../../shared/modal/modal';
+import { API_URL, mensajeDeError } from '../../api';
 
 @Component({
-  imports: [ReactiveFormsModule, Modal],
+  imports: [ReactiveFormsModule, RouterLink, Modal],
   selector: 'app-registro',
   styleUrl: './registro.scss',
   templateUrl: './registro.html',
@@ -66,7 +68,7 @@ export class Registro {
     datos.append('descripcion', this.formulario.value.descripcion ?? '');
     datos.append('fotoPerfil', this.fotoSeleccionada);
 
-    this.http.post('http://localhost:3000/autenticacion/registro', datos)
+    this.http.post(`${API_URL}/autenticacion/registro`, datos)
       .subscribe({
         next: () => {
           this.mensajeModal = 'Registro realizado correctamente';
@@ -77,16 +79,7 @@ export class Registro {
           this.formularioEnviado = false;
         },
         error: (error) => {
-          const mensaje = error.error?.message;
-
-          if (error.status === 0) {
-            this.mensajeModal = 'No se pudo conectar con el servidor';
-          } else if (Array.isArray(mensaje)) {
-            this.mensajeModal = mensaje.join('. ');
-          } else {
-            this.mensajeModal = mensaje ?? 'No se pudo registrar el usuario';
-          }
-
+          this.mensajeModal = mensajeDeError(error, 'No se pudo registrar el usuario');
           this.intentoRegistro = true;
         },
       });

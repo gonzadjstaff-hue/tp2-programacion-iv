@@ -1,0 +1,43 @@
+<section class="contenedor">
+    @if (usuario) {
+    <div class="perfil">
+        @if (usuario.fotoPerfil) {
+        <img class="foto" [src]="API_URL + usuario.fotoPerfil" alt="Foto de perfil">
+        }
+        <div>
+            <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+            <p class="usuario">&#64;{{ usuario.nombreUsuario }} · {{ usuario.rol }}</p>
+            <p>{{ usuario.email }}</p>
+            <p>Fecha de nacimiento: {{ fechaNacimiento() }}</p>
+            @if (usuario.descripcion) {
+            <p>{{ usuario.descripcion }}</p>
+            }
+        </div>
+    </div>
+
+    <h2>Mis últimas publicaciones</h2>
+
+    @for (publicacion of publicaciones(); track publicacion._id) {
+    <app-publicacion [publicacion]="publicacion" (eliminada)="cargarPublicaciones()" />
+
+    <div class="comentarios">
+        <h3>Comentarios</h3>
+        @for (comentario of comentarios()[publicacion._id]; track comentario._id) {
+        <p>
+            <strong>{{ comentario.usuario?.nombreUsuario }}</strong>: {{ comentario.mensaje }}
+            <small>{{ comentario.createdAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+        </p>
+        } @empty {
+        <p class="aviso">Sin comentarios.</p>
+        }
+    </div>
+    } @empty {
+    <p class="aviso">Todavía no publicaste nada.</p>
+    }
+    } @else {
+    <p class="aviso"><a routerLink="/login">Iniciá sesión</a> para ver tu perfil.</p>
+    }
+</section>
+
+<app-modal [mensaje]="mensajeError()" [visible]="mensajeError() !== ''" (cerrado)="mensajeError.set('')">
+</app-modal>

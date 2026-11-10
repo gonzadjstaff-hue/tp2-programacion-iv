@@ -1,1 +1,15 @@
+<nav>
+    <a class="marca" routerLink="/publicaciones">Red Social</a>
+    <a routerLink="/publicaciones" routerLinkActive="activo">Publicaciones</a>
+    <a routerLink="/mi-perfil" routerLinkActive="activo">Mi Perfil</a>
+
+    @if (sesion.obtener(); as usuario) {
+    <span>{{ usuario.nombreUsuario }}</span>
+    <button type="button" (click)="cerrarSesion()">Cerrar sesión</button>
+    } @else {
+    <a routerLink="/login" routerLinkActive="activo">Login</a>
+    <a routerLink="/registro" routerLinkActive="activo">Registro</a>
+    }
+</nav>
+
 <router-outlet />

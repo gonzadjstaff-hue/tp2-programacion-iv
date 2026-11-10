@@ -1,0 +1,32 @@
+<article class="publicacion">
+    <header>
+        @if (publicacion.usuario?.fotoPerfil) {
+        <img class="avatar" [src]="API_URL + publicacion.usuario.fotoPerfil" alt="Foto de perfil">
+        }
+        <div>
+            <strong>{{ publicacion.usuario?.nombreUsuario ?? 'Usuario eliminado' }}</strong>
+            <small>{{ publicacion.createdAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+        </div>
+    </header>
+
+    <h2>{{ publicacion.titulo }}</h2>
+    <p>{{ publicacion.descripcion }}</p>
+
+    @if (publicacion.imagen) {
+    <img class="imagen" [src]="API_URL + publicacion.imagen" alt="Imagen de la publicación">
+    }
+
+    <footer>
+        <button type="button" class="me-gusta" [class.activo]="leGusta()" [disabled]="!usuario"
+            (click)="alternarMeGusta()">
+            {{ leGusta() ? '♥' : '♡' }} {{ cantidadMeGusta() }}
+        </button>
+
+        @if (puedeEliminar()) {
+        <button type="button" class="eliminar" (click)="eliminar()">Eliminar</button>
+        }
+    </footer>
+</article>
+
+<app-modal [mensaje]="mensajeError()" [visible]="mensajeError() !== ''" (cerrado)="mensajeError.set('')">
+</app-modal>
