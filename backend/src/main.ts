@@ -14,7 +14,7 @@ async function bootstrap() {
     origin: 'http://localhost:4200',
   });
   
-  app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true }));
+  app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true, transform: true }));
 
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
     prefix: '/uploads/',

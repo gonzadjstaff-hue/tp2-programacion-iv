@@ -76,16 +76,19 @@ export class AutenticacionService {
     }
     async login(datos: LoginDto) {
         const usuario = await this.usuarioModel.findOne({
-            email: datos.email,
+            $or: [
+                { email: datos.identificador },
+                { nombreUsuario: datos.identificador },
+            ],
         });
 
         if (!usuario) {
-            throw new UnauthorizedException('credenciales incorrectas');
+            throw new UnauthorizedException('Credenciales incorrectas');
         }
         const passwordValida = await bcrypt.compare(datos.password, usuario.password);
 
         if (!passwordValida) {
-            throw new UnauthorizedException('credenciales incorrectass')
+            throw new UnauthorizedException('Credenciales incorrectas');
         }
         
         const { password, ...usuarioSeguro } = usuario.toObject();
