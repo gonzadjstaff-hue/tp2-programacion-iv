@@ -14,6 +14,7 @@ export class Registro {
   fotoSeleccionada: File | null = null;
   intentoRegistro = false;
   formularioEnviado = false;
+  mensajeModal = '';
 
   constructor(private http: HttpClient) { }
 
@@ -42,23 +43,15 @@ export class Registro {
     this.fotoSeleccionada = archivo ?? null;
   }
 
-  registrar() {
+  registrar(inputFoto: HTMLInputElement) {
     this.formularioEnviado = true;
+    this.formulario.markAllAsTouched();
 
-    console.log('Estado del formulario:', this.formulario.status, this.formulario.value);
-
-    if (this.formulario.invalid) {
-      this.formulario.markAllAsTouched();
-      return;
-    }
-
-    if (this.formulario.value.password !== this.formulario.value.repetirPassword) {
-      alert('Las contraseñas no coinciden');
-      return;
-    }
-
-    if (!this.fotoSeleccionada) {
-      alert('Debés seleccionar una foto de perfil');
+    if (
+      this.formulario.invalid ||
+      this.formulario.value.password !== this.formulario.value.repetirPassword ||
+      !this.fotoSeleccionada
+    ) {
       return;
     }
 
@@ -76,14 +69,25 @@ export class Registro {
     this.http.post('http://localhost:3000/autenticacion/registro', datos)
       .subscribe({
         next: () => {
+          this.mensajeModal = 'Registro realizado correctamente';
           this.intentoRegistro = true;
           this.formulario.reset();
           this.fotoSeleccionada = null;
+          inputFoto.value = '';
           this.formularioEnviado = false;
         },
         error: (error) => {
-          console.error('Error al registrar usuario:', error);
-          alert('No se pudo registrar el usuario');
+          const mensaje = error.error?.message;
+
+          if (error.status === 0) {
+            this.mensajeModal = 'No se pudo conectar con el servidor';
+          } else if (Array.isArray(mensaje)) {
+            this.mensajeModal = mensaje.join('. ');
+          } else {
+            this.mensajeModal = mensaje ?? 'No se pudo registrar el usuario';
+          }
+
+          this.intentoRegistro = true;
         },
       });
   }

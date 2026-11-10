@@ -12,18 +12,18 @@ import {
 
 export class RegistroDto {
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'El nombre es obligatorio' })
     nombre!: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'El apellido es obligatorio' })
     apellido!: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'El nombre de usuario es obligatorio' })
     nombreUsuario!: string;
 
-    @IsEmail()
+    @IsEmail({}, { message: 'El correo electrónico no es válido' })
     email!: string;
 
     @IsString()
@@ -39,10 +39,10 @@ export class RegistroDto {
     password!: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Debés repetir la contraseña' })
     repetirPassword!: string;
 
-    @IsDateString()
+    @IsDateString({}, { message: 'La fecha de nacimiento no es válida' })
     fechaNacimiento!: string;
 
     @IsOptional()
@@ -54,6 +54,6 @@ export class RegistroDto {
     fotoPerfil?: string;
 
     @IsOptional()
-    @IsIn(['usuario'])
+    @IsIn(['usuario'], { message: 'No se puede elegir el rol al registrarse' })
     rol?: string;
 }
