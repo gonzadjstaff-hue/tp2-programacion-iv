@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-export const API_URL = 'https://tp2-programacion-iv.onrender.com/autenticacion/registro';
+export const API_URL = 'https://tp2-programacion-iv.onrender.com';
 
 export function urlImagen(ruta: string): string {
   return ruta.startsWith('http') ? ruta : API_URL + ruta;
