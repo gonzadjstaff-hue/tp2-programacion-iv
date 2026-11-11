@@ -11,9 +11,13 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: [
+      'http://localhost:4200',
+      'https://tp2-programacion-iv-gold.vercel.app'
+    ],
+    credentials: true
   });
-  
+
   app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true, transform: true }));
 
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
