@@ -26,8 +26,7 @@ export class PublicacionesController {
         @Body() datos: CrearPublicacionDto,
         @UploadedFile() archivo?: Express.Multer.File,
     ) {
-        const imagen = archivo ? `/uploads/${archivo.filename}` : undefined;
-        return this.service.crear(datos, imagen);
+        return this.service.crear(datos, archivo);
     }
 
     @Get()

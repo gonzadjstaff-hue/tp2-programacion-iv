@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { Usuario } from '../usuarios/schemas/usuario.schema';
 import { RegistroDto } from './dto/registro.dto';
 import { LoginDto } from './dto/login.dto';
+import { subirImagen } from '../imagenes';
 
 @Injectable()
 export class AutenticacionService {
@@ -18,7 +19,7 @@ export class AutenticacionService {
         private usuarioModel: Model<Usuario>,
     ) { }
 
-    async registrar(datos: RegistroDto) {
+    async registrar(datos: RegistroDto, foto: Express.Multer.File) {
         if (datos.password !== datos.repetirPassword) {
             throw new BadRequestException('Las contraseñas no coinciden');
         }
@@ -39,6 +40,7 @@ export class AutenticacionService {
         }
 
         const passwordHash = await bcrypt.hash(datos.password, 10);
+        const fotoPerfil = await subirImagen(foto);
 
         const nuevoUsuario = new this.usuarioModel({
             nombre: datos.nombre,
@@ -48,7 +50,7 @@ export class AutenticacionService {
             password: passwordHash,
             fechaNacimiento: datos.fechaNacimiento,
             descripcion: datos.descripcion,
-            fotoPerfil: datos.fotoPerfil,
+            fotoPerfil,
             rol: 'usuario',
         });
 

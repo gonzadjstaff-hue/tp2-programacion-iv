@@ -2,7 +2,7 @@
     @if (usuario) {
     <div class="perfil">
         @if (usuario.fotoPerfil) {
-        <img class="foto" [src]="API_URL + usuario.fotoPerfil" alt="Foto de perfil">
+        <img class="foto" [src]="urlImagen(usuario.fotoPerfil)" alt="Foto de perfil">
         }
         <div>
             <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Modal } from '../modal/modal';
-import { API_URL, mensajeDeError } from '../../api';
+import { API_URL, mensajeDeError, urlImagen } from '../../api';
 import { Sesion, Usuario } from '../../services/sesion';
 
 export interface DatosPublicacion {
@@ -26,7 +26,7 @@ export class Publicacion implements OnInit {
   @Input({ required: true }) publicacion!: DatosPublicacion;
   @Output() eliminada = new EventEmitter<void>();
 
-  protected readonly API_URL = API_URL;
+  protected readonly urlImagen = urlImagen;
   usuario: Usuario | null = null;
   leGusta = signal(false);
   cantidadMeGusta = signal(0);

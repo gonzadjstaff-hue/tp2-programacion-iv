@@ -1,7 +1,7 @@
 <article class="publicacion">
     <header>
         @if (publicacion.usuario?.fotoPerfil) {
-        <img class="avatar" [src]="API_URL + publicacion.usuario.fotoPerfil" alt="Foto de perfil">
+        <img class="avatar" [src]="urlImagen(publicacion.usuario.fotoPerfil)" alt="Foto de perfil">
         }
         <div>
             <strong>{{ publicacion.usuario?.nombreUsuario ?? 'Usuario eliminado' }}</strong>
@@ -13,7 +13,7 @@
     <p>{{ publicacion.descripcion }}</p>
 
     @if (publicacion.imagen) {
-    <img class="imagen" [src]="API_URL + publicacion.imagen" alt="Imagen de la publicación">
+    <img class="imagen" [src]="urlImagen(publicacion.imagen)" alt="Imagen de la publicación">
     }
 
     <footer>

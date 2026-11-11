@@ -5,7 +5,6 @@ import {
     MinLength,
     IsDateString,
     IsOptional,
-    IsUrl,
     IsIn,
     Matches,
 } from 'class-validator';
@@ -48,10 +47,6 @@ export class RegistroDto {
     @IsOptional()
     @IsString()
     descripcion?: string;
-
-    @IsOptional()
-    @IsUrl()
-    fotoPerfil?: string;
 
     @IsOptional()
     @IsIn(['usuario'], { message: 'No se puede elegir el rol al registrarse' })

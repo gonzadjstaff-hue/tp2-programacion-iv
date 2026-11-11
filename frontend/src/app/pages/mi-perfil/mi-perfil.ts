@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { Modal } from '../../shared/modal/modal';
 import { DatosPublicacion, Publicacion } from '../../shared/publicacion/publicacion';
-import { API_URL, mensajeDeError } from '../../api';
+import { API_URL, mensajeDeError, urlImagen } from '../../api';
 import { Sesion, Usuario } from '../../services/sesion';
 
 interface Comentario {
@@ -21,7 +21,7 @@ interface Comentario {
   templateUrl: './mi-perfil.html',
 })
 export class MiPerfil implements OnInit {
-  protected readonly API_URL = API_URL;
+  protected readonly urlImagen = urlImagen;
   usuario: Usuario | null = null;
   publicaciones = signal<DatosPublicacion[]>([]);
   comentarios = signal<Record<string, Comentario[]>>({});

@@ -12,6 +12,7 @@ import { Publicacion } from './schemas/publicacion.schema';
 import { Comentario } from './schemas/comentario.schema';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto';
+import { subirImagen } from '../imagenes';
 
 @Injectable()
 export class PublicacionesService {
@@ -24,13 +25,13 @@ export class PublicacionesService {
         private usuarioModel: Model<Usuario>,
     ) { }
 
-    async crear(datos: CrearPublicacionDto, imagen?: string) {
+    async crear(datos: CrearPublicacionDto, archivo?: Express.Multer.File) {
         await this.buscarUsuario(datos.usuarioId);
 
         return this.publicacionModel.create({
             titulo: datos.titulo,
             descripcion: datos.descripcion,
-            imagen,
+            imagen: archivo ? await subirImagen(archivo) : undefined,
             usuario: datos.usuarioId,
         });
     }

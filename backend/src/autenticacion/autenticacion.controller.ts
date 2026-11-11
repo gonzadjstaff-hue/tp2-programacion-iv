@@ -32,12 +32,7 @@ export class AutenticacionController {
             );
         }
 
-        const fotoPerfil = `/uploads/${archivo.filename}`;
-
-        return this.autenticacionService.registrar({
-            ...datos,
-            fotoPerfil,
-        });
+        return this.autenticacionService.registrar(datos, archivo);
     }
 
     @Post('login')
