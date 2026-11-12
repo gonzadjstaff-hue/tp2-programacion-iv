@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { sesionGuard } from './services/sesion-guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -14,11 +15,13 @@ export const routes: Routes = [
     },
     {
         path: 'publicaciones',
+        canActivate: [sesionGuard],
         loadComponent: () =>
             import('./pages/publicaciones/publicaciones').then(m => m.Publicaciones),
     },
     {
         path: 'mi-perfil',
+        canActivate: [sesionGuard],
         loadComponent: () =>
             import('./pages/mi-perfil/mi-perfil').then(m => m.MiPerfil),
     },
