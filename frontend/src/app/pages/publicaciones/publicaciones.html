@@ -7,7 +7,7 @@
 
         <div>
             <label for="titulo">Título</label>
-            <input id="titulo" type="text" formControlName="titulo">
+            <input id="titulo" type="text" formControlName="titulo" maxlength="100">
             @if (formulario.get('titulo')?.invalid && formulario.get('titulo')?.touched) {
             <div class="error">El título es obligatorio</div>
             }
