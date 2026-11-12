@@ -139,6 +139,21 @@ form button[type='submit'] {
   width: 100%;
 }
 
+button.secundario {
+  background: var(--tarjeta);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+
+  &:hover:not(:disabled) {
+    background: var(--borde);
+  }
+}
+
+form button.secundario {
+  width: 100%;
+  margin-top: 8px;
+}
+
 h1 {
   margin-top: 0;
 }

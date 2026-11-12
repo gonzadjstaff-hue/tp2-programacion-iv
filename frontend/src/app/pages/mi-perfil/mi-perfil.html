@@ -12,8 +12,55 @@
             @if (usuario.descripcion) {
             <p>{{ usuario.descripcion }}</p>
             }
+            @if (!editando()) {
+            <button type="button" (click)="editar()">Editar perfil</button>
+            }
         </div>
     </div>
+
+    @if (editando()) {
+    <form [formGroup]="formulario" (ngSubmit)="guardar()">
+        <h2>Editar perfil</h2>
+
+        <div>
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" formControlName="nombre">
+            @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
+            <div class="error">El nombre es obligatorio</div>
+            }
+        </div>
+
+        <div>
+            <label for="apellido">Apellido</label>
+            <input id="apellido" type="text" formControlName="apellido">
+            @if (formulario.get('apellido')?.invalid && formulario.get('apellido')?.touched) {
+            <div class="error">El apellido es obligatorio</div>
+            }
+        </div>
+
+        <div>
+            <label for="fechaNacimiento">Fecha de nacimiento</label>
+            <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento">
+            @if (formulario.get('fechaNacimiento')?.invalid && formulario.get('fechaNacimiento')?.touched) {
+            <div class="error">La fecha de nacimiento es obligatoria</div>
+            }
+        </div>
+
+        <div>
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" formControlName="descripcion"></textarea>
+        </div>
+
+        <div>
+            <label for="fotoPerfil">Foto de perfil (opcional)</label>
+            <input id="fotoPerfil" type="file" accept="image/jpeg,image/png,image/webp"
+                (change)="seleccionarFoto($event)">
+        </div>
+
+        <button type="submit">Guardar cambios</button>
+        <button type="button" class="secundario" (click)="editando.set(false)">Cancelar</button>
+    </form>
+    }
 
     <h2>Mis últimas publicaciones</h2>
 
@@ -39,5 +86,5 @@
     }
 </section>
 
-<app-modal [mensaje]="mensajeError()" [visible]="mensajeError() !== ''" (cerrado)="mensajeError.set('')">
+<app-modal [mensaje]="mensajeModal()" [visible]="mensajeModal() !== ''" (cerrado)="mensajeModal.set('')">
 </app-modal>
