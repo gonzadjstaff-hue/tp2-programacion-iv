@@ -321,6 +321,11 @@ form p a {
   small {
     color: var(--texto-suave);
   }
+
+  a {
+    font-size: 14px;
+    color: var(--primario);
+  }
 }
 
 a.volver {

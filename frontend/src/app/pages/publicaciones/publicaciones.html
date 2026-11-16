@@ -41,6 +41,22 @@
 
     @for (publicacion of publicaciones(); track publicacion._id) {
     <app-publicacion [publicacion]="publicacion" (eliminada)="alEliminar()" />
+
+    @if (comentarios()[publicacion._id]; as resumen) {
+    <div class="comentarios">
+        @for (comentario of resumen.lista; track comentario._id) {
+        <p>
+            <strong>{{ comentario.usuario?.nombreUsuario ?? 'Usuario eliminado' }}</strong>: {{ comentario.mensaje }}
+            @if (comentario.modificado) {
+            <small>(editado)</small>
+            }
+        </p>
+        }
+        <a [routerLink]="['/publicaciones', publicacion._id]">
+            {{ resumen.total > 2 ? 'Ver los ' + resumen.total + ' comentarios' : 'Comentar' }}
+        </a>
+    </div>
+    }
     } @empty {
     <p class="aviso">Todavía no hay publicaciones.</p>
     }
