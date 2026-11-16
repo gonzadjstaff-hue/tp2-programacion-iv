@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { Modal } from '../../shared/modal/modal';
 import { API_URL, mensajeDeError } from '../../api';
-import { Sesion, Usuario } from '../../services/sesion';
+import { RespuestaSesion, Sesion } from '../../services/sesion';
 
 @Component({
   imports: [ReactiveFormsModule, RouterLink, Modal],
@@ -38,10 +38,10 @@ export class Login {
       return;
     }
 
-    this.http.post<Usuario>(`${API_URL}/autenticacion/login`, this.formulario.value)
+    this.http.post<RespuestaSesion>(`${API_URL}/autenticacion/login`, this.formulario.value)
       .subscribe({
-        next: (usuario) => {
-          this.sesion.guardar(usuario);
+        next: (respuesta) => {
+          this.sesion.iniciar(respuesta);
           this.router.navigate(['/publicaciones']);
         },
         error: (error) => {

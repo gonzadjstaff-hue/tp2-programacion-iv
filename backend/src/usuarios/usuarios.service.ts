@@ -15,8 +15,8 @@ export class UsuariosService {
         return await this.usuarioModel.find().select('-password').exec();
     }
 
-    async actualizar(id: string, datos: ActualizarUsuarioDto, archivo?: Express.Multer.File) {
-        if (datos.usuarioId !== id) {
+    async actualizar(id: string, usuarioId: string, datos: ActualizarUsuarioDto, archivo?: Express.Multer.File) {
+        if (usuarioId !== id) {
             throw new ForbiddenException('Solo podés editar tu propio perfil');
         }
 

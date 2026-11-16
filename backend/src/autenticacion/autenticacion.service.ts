@@ -4,6 +4,7 @@ import {
     ConflictException,
     UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -17,7 +18,33 @@ export class AutenticacionService {
     constructor(
         @InjectModel(Usuario.name)
         private usuarioModel: Model<Usuario>,
+        private jwtService: JwtService,
     ) { }
+
+    private async crearSesion(usuario: { _id: unknown; rol: string }) {
+        const token = await this.jwtService.signAsync({
+            sub: String(usuario._id),
+            rol: usuario.rol,
+        });
+
+        return { token, usuario };
+    }
+
+    async autorizar(usuarioId: string) {
+        const usuario = await this.usuarioModel.findById(usuarioId).select('-password');
+
+        if (!usuario) {
+            throw new UnauthorizedException('El usuario ya no existe');
+        }
+
+        return usuario;
+    }
+
+    async refrescar(usuarioId: string, rol: string) {
+        const token = await this.jwtService.signAsync({ sub: usuarioId, rol });
+
+        return { token };
+    }
 
     async registrar(datos: RegistroDto, foto: Express.Multer.File) {
         if (datos.password !== datos.repetirPassword) {
@@ -60,7 +87,7 @@ export class AutenticacionService {
             const usuario = usuarioGuardado.toObject();
             const { password, ...datosSeguros } = usuario;
 
-            return datosSeguros;
+            return this.crearSesion(datosSeguros);
         } catch (error: unknown) {
             if (
                 typeof error === 'object' &&
@@ -95,6 +122,6 @@ export class AutenticacionService {
         
         const { password, ...usuarioSeguro } = usuario.toObject();
         
-        return usuarioSeguro;
+        return this.crearSesion(usuarioSeguro);
     }
 }

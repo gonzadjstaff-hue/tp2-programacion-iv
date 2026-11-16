@@ -1,9 +1,6 @@
-import { IsDateString, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class ActualizarUsuarioDto {
-  @IsMongoId({ message: 'El usuario no es válido' })
-  usuarioId!: string;
-
   @IsString()
   @IsNotEmpty({ message: 'El nombre es obligatorio' })
   nombre!: string;

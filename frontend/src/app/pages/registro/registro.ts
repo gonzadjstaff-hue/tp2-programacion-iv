@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { Modal } from '../../shared/modal/modal';
 import { API_URL, mensajeDeError } from '../../api';
-import { Sesion, Usuario } from '../../services/sesion';
+import { RespuestaSesion, Sesion } from '../../services/sesion';
 
 @Component({
   imports: [ReactiveFormsModule, RouterLink, Modal],
@@ -74,10 +74,10 @@ export class Registro {
     datos.append('descripcion', this.formulario.value.descripcion ?? '');
     datos.append('fotoPerfil', this.fotoSeleccionada);
 
-    this.http.post<Usuario>(`${API_URL}/autenticacion/registro`, datos)
+    this.http.post<RespuestaSesion>(`${API_URL}/autenticacion/registro`, datos)
       .subscribe({
-        next: (usuario) => {
-          this.sesion.guardar(usuario);
+        next: (respuesta) => {
+          this.sesion.iniciar(respuesta);
           this.registroExitoso = true;
           this.mensajeModal = 'Registro realizado correctamente. Ya iniciaste sesión.';
           this.intentoRegistro = true;

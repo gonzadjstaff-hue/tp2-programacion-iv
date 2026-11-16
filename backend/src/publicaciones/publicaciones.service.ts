@@ -9,7 +9,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { Usuario } from '../usuarios/schemas/usuario.schema';
 import { Publicacion } from './schemas/publicacion.schema';
-import { Comentario } from './schemas/comentario.schema';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto';
 import { subirImagen } from '../imagenes';
@@ -19,20 +18,18 @@ export class PublicacionesService {
     constructor(
         @InjectModel(Publicacion.name)
         private publicacionModel: Model<Publicacion>,
-        @InjectModel(Comentario.name)
-        private comentarioModel: Model<Comentario>,
         @InjectModel(Usuario.name)
         private usuarioModel: Model<Usuario>,
     ) { }
 
-    async crear(datos: CrearPublicacionDto, archivo?: Express.Multer.File) {
-        await this.buscarUsuario(datos.usuarioId);
+    async crear(usuarioId: string, datos: CrearPublicacionDto, archivo?: Express.Multer.File) {
+        await this.buscarUsuario(usuarioId);
 
         return this.publicacionModel.create({
             titulo: datos.titulo,
             descripcion: datos.descripcion,
             imagen: archivo ? await subirImagen(archivo) : undefined,
-            usuario: datos.usuarioId,
+            usuario: usuarioId,
         });
     }
 
@@ -107,13 +104,10 @@ export class PublicacionesService {
         return { mensaje: 'Me gusta quitado' };
     }
 
-    async listarComentarios(id: string) {
-        await this.buscarPublicacion(id);
+    async obtener(id: string) {
+        const publicacion = await this.buscarPublicacion(id);
 
-        return this.comentarioModel
-            .find({ publicacion: id })
-            .sort({ createdAt: -1 })
-            .populate('usuario', 'nombreUsuario');
+        return publicacion.populate('usuario', 'nombreUsuario fotoPerfil');
     }
 
     private async buscarPublicacion(id: string) {

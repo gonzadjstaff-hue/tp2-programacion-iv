@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Modal } from './shared/modal/modal';
+import { API_URL } from './api';
 import { Sesion } from './services/sesion';
 
 @Component({
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, Modal],
   selector: 'app-root',
   styleUrl: './app.scss',
   templateUrl: './app.html',
@@ -12,7 +15,18 @@ export class App {
   constructor(
     protected sesion: Sesion,
     private router: Router,
+    private http: HttpClient,
   ) { }
+
+  extenderSesion() {
+    this.http.post<{ token: string }>(`${API_URL}/autenticacion/refrescar`, {}).subscribe({
+      next: (respuesta) => this.sesion.guardarToken(respuesta.token),
+    });
+  }
+
+  ignorarAviso() {
+    this.sesion.avisoExpiracion.set(false);
+  }
 
   cerrarSesion() {
     this.sesion.cerrar();

@@ -1,0 +1,51 @@
+<section class="contenedor detalle">
+    <a class="volver" routerLink="/publicaciones">&larr; Volver a publicaciones</a>
+
+    @if (publicacion(); as publicacion) {
+    <app-publicacion [publicacion]="publicacion" (eliminada)="volver()" />
+
+    <h2>Comentarios ({{ total() }})</h2>
+
+    <form class="nueva" (ngSubmit)="comentar()">
+        <label for="nuevoComentario">Escribí un comentario</label>
+        <textarea id="nuevoComentario" [formControl]="nuevo" maxlength="300"></textarea>
+        <button type="submit">Comentar</button>
+    </form>
+
+    @for (comentario of comentarios(); track comentario._id) {
+    <article class="comentario">
+        <header>
+            <strong>{{ comentario.usuario?.nombreUsuario ?? 'Usuario eliminado' }}</strong>
+            <small>
+                {{ comentario.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                @if (comentario.modificado) {
+                <em>(editado)</em>
+                }
+            </small>
+        </header>
+
+        @if (editandoId() === comentario._id) {
+        <textarea [formControl]="edicion" maxlength="300"></textarea>
+        <div class="acciones-comentario">
+            <button type="button" (click)="guardarEdicion(comentario)">Guardar</button>
+            <button type="button" class="secundario" (click)="editandoId.set('')">Cancelar</button>
+        </div>
+        } @else {
+        <p>{{ comentario.mensaje }}</p>
+        @if (esAutor(comentario)) {
+        <button type="button" class="secundario" (click)="editar(comentario)">Editar</button>
+        }
+        }
+    </article>
+    } @empty {
+    <p class="aviso">Todavía no hay comentarios.</p>
+    }
+
+    @if (comentarios().length < total()) {
+    <button type="button" class="secundario cargar-mas" (click)="cargarComentarios()">Cargar más</button>
+    }
+    }
+</section>
+
+<app-modal [mensaje]="mensajeModal()" [visible]="mensajeModal() !== ''" (cerrado)="mensajeModal.set('')">
+</app-modal>

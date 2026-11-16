@@ -6,6 +6,7 @@ import {
     Param,
     Post,
     Query,
+    Req,
     UploadedFile,
     UseInterceptors,
 } from '@nestjs/common';
@@ -14,7 +15,8 @@ import { opcionesImagen } from '../imagenes';
 import { PublicacionesService } from './publicaciones.service';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto';
-import { UsuarioIdDto } from './dto/usuario-id.dto';
+import type { SolicitudAutenticada } from '../autenticacion/autenticacion.guard';
+import { TrimPipe } from '../trim.pipe';
 
 @Controller('publicaciones')
 export class PublicacionesController {
@@ -24,9 +26,10 @@ export class PublicacionesController {
     @UseInterceptors(FileInterceptor('imagen', opcionesImagen))
     crear(
         @Body() datos: CrearPublicacionDto,
+        @Req() solicitud: SolicitudAutenticada,
         @UploadedFile() archivo?: Express.Multer.File,
     ) {
-        return this.service.crear(datos, archivo);
+        return this.service.crear(solicitud.usuario.sub, datos, archivo);
     }
 
     @Get()
@@ -35,22 +38,22 @@ export class PublicacionesController {
     }
 
     @Delete(':id')
-    eliminar(@Param('id') id: string, @Body() datos: UsuarioIdDto) {
-        return this.service.eliminar(id, datos.usuarioId);
+    eliminar(@Param('id', TrimPipe) id: string, @Req() solicitud: SolicitudAutenticada) {
+        return this.service.eliminar(id, solicitud.usuario.sub);
     }
 
     @Post(':id/me-gusta')
-    darMeGusta(@Param('id') id: string, @Body() datos: UsuarioIdDto) {
-        return this.service.darMeGusta(id, datos.usuarioId);
+    darMeGusta(@Param('id', TrimPipe) id: string, @Req() solicitud: SolicitudAutenticada) {
+        return this.service.darMeGusta(id, solicitud.usuario.sub);
     }
 
     @Delete(':id/me-gusta')
-    quitarMeGusta(@Param('id') id: string, @Body() datos: UsuarioIdDto) {
-        return this.service.quitarMeGusta(id, datos.usuarioId);
+    quitarMeGusta(@Param('id', TrimPipe) id: string, @Req() solicitud: SolicitudAutenticada) {
+        return this.service.quitarMeGusta(id, solicitud.usuario.sub);
     }
 
-    @Get(':id/comentarios')
-    listarComentarios(@Param('id') id: string) {
-        return this.service.listarComentarios(id);
+    @Get(':id')
+    obtener(@Param('id', TrimPipe) id: string) {
+        return this.service.obtener(id);
     }
 }

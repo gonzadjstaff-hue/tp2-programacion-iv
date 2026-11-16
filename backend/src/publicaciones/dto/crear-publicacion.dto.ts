@@ -1,4 +1,4 @@
-import { IsMongoId, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CrearPublicacionDto {
   @IsString()
@@ -9,7 +9,4 @@ export class CrearPublicacionDto {
   @IsString()
   @IsNotEmpty({ message: 'La descripción es obligatoria' })
   descripcion!: string;
-
-  @IsMongoId({ message: 'El usuario no es válido' })
-  usuarioId!: string;
 }

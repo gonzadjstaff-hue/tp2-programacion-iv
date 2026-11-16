@@ -9,7 +9,7 @@
         </div>
     </header>
 
-    <h2>{{ publicacion.titulo }}</h2>
+    <h2><a [routerLink]="['/publicaciones', publicacion._id]">{{ publicacion.titulo }}</a></h2>
     <p>{{ publicacion.descripcion }}</p>
 
     @if (publicacion.imagen) {

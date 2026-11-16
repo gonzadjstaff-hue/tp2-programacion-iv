@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 import { Modal } from '../modal/modal';
 import { API_URL, mensajeDeError, urlImagen } from '../../api';
 import { Sesion, Usuario } from '../../services/sesion';
@@ -16,8 +17,16 @@ export interface DatosPublicacion {
   createdAt: string;
 }
 
+export interface DatosComentario {
+  _id: string;
+  mensaje: string;
+  modificado: boolean;
+  usuario: { _id: string; nombreUsuario: string; fotoPerfil?: string };
+  createdAt: string;
+}
+
 @Component({
-  imports: [DatePipe, Modal],
+  imports: [DatePipe, RouterLink, Modal],
   selector: 'app-publicacion',
   styleUrl: './publicacion.scss',
   templateUrl: './publicacion.html',
@@ -57,10 +66,9 @@ export class Publicacion implements OnInit {
     }
 
     const url = `${API_URL}/publicaciones/${this.publicacion._id}/me-gusta`;
-    const body = { usuarioId: this.usuario._id };
     const pedido = this.leGusta()
-      ? this.http.delete(url, { body })
-      : this.http.post(url, body);
+      ? this.http.delete(url)
+      : this.http.post(url, {});
 
     pedido.subscribe({
       next: () => {
@@ -80,9 +88,7 @@ export class Publicacion implements OnInit {
       return;
     }
 
-    this.http.delete(`${API_URL}/publicaciones/${this.publicacion._id}`, {
-      body: { usuarioId: this.usuario._id },
-    }).subscribe({
+    this.http.delete(`${API_URL}/publicaciones/${this.publicacion._id}`).subscribe({
       next: () => this.eliminada.emit(),
       error: (error) => {
         this.mensajeError.set(mensajeDeError(error, 'No se pudo eliminar la publicación'));

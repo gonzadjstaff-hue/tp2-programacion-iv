@@ -78,7 +78,6 @@ export class MiPerfil implements OnInit {
     }
 
     const datos = new FormData();
-    datos.append('usuarioId', this.usuario!._id);
     datos.append('nombre', this.formulario.value.nombre ?? '');
     datos.append('apellido', this.formulario.value.apellido ?? '');
     datos.append('fechaNacimiento', this.formulario.value.fechaNacimiento ?? '');
@@ -118,10 +117,10 @@ export class MiPerfil implements OnInit {
   }
 
   cargarComentarios(publicacionId: string) {
-    this.http.get<Comentario[]>(`${API_URL}/publicaciones/${publicacionId}/comentarios`)
+    this.http.get<{ comentarios: Comentario[] }>(`${API_URL}/publicaciones/${publicacionId}/comentarios`)
       .subscribe({
-        next: (comentarios) => {
-          this.comentarios.update((actuales) => ({ ...actuales, [publicacionId]: comentarios }));
+        next: (respuesta) => {
+          this.comentarios.update((actuales) => ({ ...actuales, [publicacionId]: respuesta.comentarios }));
         },
       });
   }

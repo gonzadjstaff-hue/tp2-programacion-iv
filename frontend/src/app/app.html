@@ -13,3 +13,8 @@
 </nav>
 
 <router-outlet />
+
+<app-modal mensaje="Quedan 5 minutos de sesión. ¿Querés extenderla?" [visible]="sesion.avisoExpiracion()"
+    [pedirConfirmacion]="true" textoConfirmar="Extender sesión" (cerrado)="ignorarAviso()"
+    (confirmado)="extenderSesion()">
+</app-modal>
