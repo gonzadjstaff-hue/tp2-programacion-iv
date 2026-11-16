@@ -6,7 +6,7 @@
 
     <h2>Comentarios ({{ total() }})</h2>
 
-    <form class="nueva" (ngSubmit)="comentar()">
+    <form class="nueva" (submit)="$event.preventDefault(); comentar()">
         <label for="nuevoComentario">Escribí un comentario</label>
         <textarea id="nuevoComentario" [formControl]="nuevo" maxlength="300"></textarea>
         <button type="submit">Comentar</button>
