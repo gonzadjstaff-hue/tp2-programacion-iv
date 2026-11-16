@@ -23,10 +23,15 @@
         </button>
 
         @if (puedeEliminar()) {
-        <button type="button" class="eliminar" (click)="eliminar()">Eliminar</button>
+        <button type="button" class="eliminar" (click)="confirmandoEliminar.set(true)">Eliminar</button>
         }
     </footer>
 </article>
+
+<app-modal mensaje="¿Seguro que querés eliminar esta publicación?" [visible]="confirmandoEliminar()"
+    [pedirConfirmacion]="true" textoConfirmar="Eliminar" (cerrado)="confirmandoEliminar.set(false)"
+    (confirmado)="eliminar()">
+</app-modal>
 
 <app-modal [mensaje]="mensajeError()" [visible]="mensajeError() !== ''" (cerrado)="mensajeError.set('')">
 </app-modal>

@@ -2,7 +2,14 @@
 <div class="modal-fondo">
     <div class="modal-contenido">
         <p>{{ mensaje }}</p>
-        <button type="button" (click)="cerrar()">Aceptar</button>
+        <div class="acciones">
+            @if (pedirConfirmacion) {
+            <button type="button" class="cancelar" (click)="cerrar()">Cancelar</button>
+            <button type="button" (click)="confirmar()">{{ textoConfirmar }}</button>
+            } @else {
+            <button type="button" (click)="cerrar()">Aceptar</button>
+            }
+        </div>
     </div>
 </div>
 }

@@ -31,6 +31,7 @@ export class Publicacion implements OnInit {
   leGusta = signal(false);
   cantidadMeGusta = signal(0);
   mensajeError = signal('');
+  confirmandoEliminar = signal(false);
 
   constructor(
     private http: HttpClient,
@@ -73,6 +74,8 @@ export class Publicacion implements OnInit {
   }
 
   eliminar() {
+    this.confirmandoEliminar.set(false);
+
     if (!this.usuario) {
       return;
     }

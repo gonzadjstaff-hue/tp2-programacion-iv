@@ -22,6 +22,12 @@
         margin-bottom: 20px;
     }
 
+    .acciones {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+    }
+
     button {
         padding: 10px 24px;
         background: var(--primario);
@@ -29,5 +35,10 @@
         border: none;
         border-radius: 6px;
         cursor: pointer;
+
+        &.cancelar {
+            background: #e5e7eb;
+            color: #222;
+        }
     }
 }
