@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
-const AVISO_ANTES_DE_VENCER_MS = 5 * 60 * 1000;
+const AVISO_ANTES_DE_VENCER_MS = 1 * 60 * 1000;
 
 export interface Usuario {
   _id: string;

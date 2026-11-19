@@ -21,7 +21,7 @@ import { Usuario, UsuarioSchema } from '../usuarios/schemas/usuario.schema';
 
         return {
           secret: process.env.JWT_SECRET,
-          signOptions: { expiresIn: '15m' },
+          signOptions: { expiresIn: '3m' },
         };
       },
     }),
