@@ -1,7 +1,7 @@
 .modal-fondo {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(8, 0, 20, 0.78);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,17 +9,19 @@
 }
 
 .modal-contenido {
-    background: white;
-    color: #222;
+    background: #1d0040;
+    color: var(--texto);
     padding: 30px;
+    border: 1px solid var(--cian);
     border-radius: 12px;
     max-width: 400px;
     width: 90%;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.35), 0 0 80px rgba(255, 46, 151, 0.2);
 
     p {
         margin-bottom: 20px;
+        overflow-wrap: anywhere;
     }
 
     .acciones {
@@ -30,15 +32,17 @@
 
     button {
         padding: 10px 24px;
-        background: var(--primario);
+        background: linear-gradient(90deg, var(--primario), var(--naranja));
         color: white;
         border: none;
-        border-radius: 6px;
+        border-radius: 4px;
         cursor: pointer;
 
         &.cancelar {
-            background: #e5e7eb;
-            color: #222;
+            background: transparent;
+            border: 1px solid var(--cian);
+            color: var(--cian);
+            box-shadow: none;
         }
     }
 }

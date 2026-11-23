@@ -4,8 +4,8 @@
   "description": "Red social para publicar, reaccionar y comentar",
   "lang": "es",
   "display": "standalone",
-  "background_color": "#f3f4f8",
-  "theme_color": "#4f46e5",
+  "background_color": "#12002b",
+  "theme_color": "#12002b",
   "scope": "./",
   "start_url": "./",
   "icons": [

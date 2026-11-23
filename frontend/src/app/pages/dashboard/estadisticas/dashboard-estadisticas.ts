@@ -6,6 +6,9 @@ import { Modal } from '../../../shared/modal/modal';
 import { API_URL, mensajeDeError } from '../../../api';
 
 Chart.register(...registerables);
+Chart.defaults.color = '#d9c9f2';
+Chart.defaults.borderColor = 'rgba(0, 240, 255, 0.18)';
+Chart.defaults.font.family = "'Chakra Petch', sans-serif";
 
 interface Grafico {
   titulo: string;
@@ -18,7 +21,7 @@ interface Grafico {
   chart?: Chart;
 }
 
-const COLORES = ['#4f46e5', '#e11d48', '#059669', '#d97706', '#0891b2', '#7c3aed', '#db2777', '#65a30d'];
+const COLORES = ['#ff2e97', '#00f0ff', '#ffd23f', '#ff7b3a', '#9b5cff', '#3dff8b', '#ff6b8b', '#5b6bff'];
 
 function fechaLocal(fecha: Date) {
   const mes = String(fecha.getMonth() + 1).padStart(2, '0');

@@ -47,13 +47,13 @@ tr:last-child td {
 .estado {
     padding: 2px 8px;
     border-radius: 999px;
-    background: #dcfce7;
-    color: #166534;
+    background: rgba(61, 255, 139, 0.15);
+    color: #3dff8b;
     font-size: 12px;
     font-weight: 600;
 
     &.deshabilitado {
-        background: #fee2e2;
+        background: rgba(255, 107, 139, 0.18);
         color: var(--error);
     }
 }
