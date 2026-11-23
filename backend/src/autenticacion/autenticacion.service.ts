@@ -1,7 +1,7 @@
 import {
     Injectable,
     BadRequestException,
-    ConflictException,
+    ForbiddenException,
     UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -11,7 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { Usuario } from '../usuarios/schemas/usuario.schema';
 import { RegistroDto } from './dto/registro.dto';
 import { LoginDto } from './dto/login.dto';
-import { subirImagen } from '../imagenes';
+import { UsuariosService } from '../usuarios/usuarios.service';
 
 @Injectable()
 export class AutenticacionService {
@@ -19,6 +19,7 @@ export class AutenticacionService {
         @InjectModel(Usuario.name)
         private usuarioModel: Model<Usuario>,
         private jwtService: JwtService,
+        private usuariosService: UsuariosService,
     ) { }
 
     private async crearSesion(usuario: { _id: unknown; rol: string }) {
@@ -37,72 +38,31 @@ export class AutenticacionService {
             throw new UnauthorizedException('El usuario ya no existe');
         }
 
+        if (!usuario.habilitado) {
+            throw new UnauthorizedException('Tu cuenta está deshabilitada');
+        }
+
         return usuario;
     }
 
     async refrescar(usuarioId: string, rol: string) {
+        await this.autorizar(usuarioId);
+
         const token = await this.jwtService.signAsync({ sub: usuarioId, rol });
 
         return { token };
     }
 
     async registrar(datos: RegistroDto, foto: Express.Multer.File) {
-        if (datos.password !== datos.repetirPassword) {
-            throw new BadRequestException('Las contraseñas no coinciden');
+        if (datos.rol && datos.rol !== 'usuario') {
+            throw new BadRequestException('No se puede elegir el rol al registrarse');
         }
 
+        const usuario = await this.usuariosService.crear(datos, foto, 'usuario');
 
-
-        const existe = await this.usuarioModel.findOne({
-            $or: [
-                { email: datos.email },
-                { nombreUsuario: datos.nombreUsuario },
-            ],
-        });
-
-        if (existe) {
-            throw new ConflictException(
-                'El email o nombre de usuario ya está registrado',
-            );
-        }
-
-        const passwordHash = await bcrypt.hash(datos.password, 10);
-        const fotoPerfil = await subirImagen(foto);
-
-        const nuevoUsuario = new this.usuarioModel({
-            nombre: datos.nombre,
-            apellido: datos.apellido,
-            nombreUsuario: datos.nombreUsuario,
-            email: datos.email,
-            password: passwordHash,
-            fechaNacimiento: datos.fechaNacimiento,
-            descripcion: datos.descripcion,
-            fotoPerfil,
-            rol: 'usuario',
-        });
-
-        try {
-            const usuarioGuardado = await nuevoUsuario.save();
-
-            const usuario = usuarioGuardado.toObject();
-            const { password, ...datosSeguros } = usuario;
-
-            return this.crearSesion(datosSeguros);
-        } catch (error: unknown) {
-            if (
-                typeof error === 'object' &&
-                error !== null &&
-                'code' in error &&
-                error.code === 11000
-            ) {
-                throw new ConflictException(
-                    'El email o nombre de usuario ya está registrado',
-                );
-            }
-
-            throw error;
-        }
+        return this.crearSesion(usuario);
     }
+
     async login(datos: LoginDto) {
         const usuario = await this.usuarioModel.findOne({
             $or: [
@@ -120,6 +80,12 @@ export class AutenticacionService {
             throw new UnauthorizedException('Credenciales incorrectas');
         }
         
+        if (!usuario.habilitado) {
+            throw new ForbiddenException(
+                'Tu cuenta está deshabilitada. No estás autorizado para ingresar a la aplicación',
+            );
+        }
+
         const { password, ...usuarioSeguro } = usuario.toObject();
         
         return this.crearSesion(usuarioSeguro);

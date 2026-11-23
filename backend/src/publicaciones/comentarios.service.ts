@@ -43,6 +43,8 @@ export class ComentariosService {
     }
 
     async modificar(publicacionId: string, comentarioId: string, usuarioId: string, datos: ComentarioDto) {
+        await this.buscarPublicacion(publicacionId);
+
         const comentario = isValidObjectId(comentarioId)
             ? await this.comentarioModel.findOne({ _id: comentarioId, publicacion: publicacionId })
             : null;

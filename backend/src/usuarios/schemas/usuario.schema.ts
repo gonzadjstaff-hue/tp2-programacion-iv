@@ -28,6 +28,9 @@ export class Usuario {
 
   @Prop({ default: 'usuario' })
   rol!: string;
+
+  @Prop({ default: true })
+  habilitado!: boolean;
 }
 
 export const UsuarioSchema = SchemaFactory.createForClass(Usuario);

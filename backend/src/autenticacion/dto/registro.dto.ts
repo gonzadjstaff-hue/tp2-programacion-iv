@@ -49,6 +49,6 @@ export class RegistroDto {
     descripcion?: string;
 
     @IsOptional()
-    @IsIn(['usuario'], { message: 'No se puede elegir el rol al registrarse' })
+    @IsIn(['usuario', 'administrador'], { message: 'El rol debe ser usuario o administrador' })
     rol?: string;
 }

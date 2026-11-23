@@ -5,10 +5,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AutenticacionController } from './autenticacion.controller';
 import { AutenticacionService } from './autenticacion.service';
 import { AuthGuard } from './autenticacion.guard';
+import { UsuariosModule } from '../usuarios/usuarios.module';
 import { Usuario, UsuarioSchema } from '../usuarios/schemas/usuario.schema';
 
 @Module({
   imports: [
+    UsuariosModule,
     MongooseModule.forFeature([
       { name: Usuario.name, schema: UsuarioSchema },
     ]),
