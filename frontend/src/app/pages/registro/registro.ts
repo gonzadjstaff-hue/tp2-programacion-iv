@@ -74,9 +74,12 @@ export class Registro {
     datos.append('descripcion', this.formulario.value.descripcion ?? '');
     datos.append('fotoPerfil', this.fotoSeleccionada);
 
+    this.sesion.cargando.set(true);
+
     this.http.post<RespuestaSesion>(`${API_URL}/autenticacion/registro`, datos)
       .subscribe({
         next: (respuesta) => {
+          this.sesion.cargando.set(false);
           this.sesion.iniciar(respuesta);
           this.registroExitoso = true;
           this.mensajeModal = 'Registro realizado correctamente. Ya iniciaste sesión.';
@@ -87,6 +90,7 @@ export class Registro {
           this.formularioEnviado = false;
         },
         error: (error) => {
+          this.sesion.cargando.set(false);
           this.mensajeModal = mensajeDeError(error, 'No se pudo registrar el usuario');
           this.intentoRegistro = true;
         },

@@ -38,13 +38,16 @@ export class Login {
       return;
     }
 
+    this.sesion.cargando.set(true);
+
     this.http.post<RespuestaSesion>(`${API_URL}/autenticacion/login`, this.formulario.value)
       .subscribe({
         next: (respuesta) => {
           this.sesion.iniciar(respuesta);
-          this.router.navigate(['/publicaciones']);
+          this.router.navigate(['/publicaciones']).finally(() => this.sesion.cargando.set(false));
         },
         error: (error) => {
+          this.sesion.cargando.set(false);
           this.mensajeModal = mensajeDeError(error, 'No se pudo iniciar sesión');
           this.mostrarModal = true;
         },

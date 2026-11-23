@@ -6,7 +6,7 @@ import { Sesion, Usuario } from '../../services/sesion';
 
 @Component({
   selector: 'app-cargando',
-  templateUrl: './cargando.html',
+  template: '',
 })
 export class Cargando implements OnInit {
   constructor(
@@ -21,13 +21,19 @@ export class Cargando implements OnInit {
       return;
     }
 
+    this.sesion.cargando.set(true);
+
     this.http.post<Usuario>(`${API_URL}/autenticacion/autorizar`, {}).subscribe({
       next: (usuario) => {
         this.sesion.guardar(usuario);
+        this.sesion.validada = true;
         this.sesion.programarAviso();
-        this.router.navigate(['/publicaciones']);
+        this.router.navigate(['/publicaciones']).finally(() => this.sesion.cargando.set(false));
       },
-      error: () => this.router.navigate(['/login']),
+      error: () => {
+        this.sesion.cerrar();
+        this.router.navigate(['/login']).finally(() => this.sesion.cargando.set(false));
+      },
     });
   }
 }

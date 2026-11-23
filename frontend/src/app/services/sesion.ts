@@ -22,9 +22,12 @@ export interface RespuestaSesion {
 @Injectable({ providedIn: 'root' })
 export class Sesion {
   avisoExpiracion = signal(false);
+  cargando = signal(false);
+  validada = false;
   private temporizador?: ReturnType<typeof setTimeout>;
 
   iniciar(respuesta: RespuestaSesion) {
+    this.validada = true;
     this.guardarToken(respuesta.token);
     this.guardar(respuesta.usuario);
   }
@@ -69,6 +72,7 @@ export class Sesion {
   }
 
   cerrar() {
+    this.validada = false;
     clearTimeout(this.temporizador);
     this.avisoExpiracion.set(false);
     localStorage.removeItem('usuario');

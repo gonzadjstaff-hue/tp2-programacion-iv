@@ -1,9 +1,15 @@
+@if (sesion.cargando()) {
+<div class="cargando pantalla-carga">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+</div>
+} @else {
 <nav>
-    <a class="marca" routerLink="/publicaciones">Falsebook</a>
-    <a routerLink="/publicaciones" routerLinkActive="activo">Publicaciones</a>
-    <a routerLink="/mi-perfil" routerLinkActive="activo">Mi Perfil</a>
+    <a class="marca" [routerLink]="sesion.obtener() ? '/publicaciones' : '/login'">Falsebook</a>
 
     @if (sesion.obtener(); as usuario) {
+    <a routerLink="/publicaciones" routerLinkActive="activo">Publicaciones</a>
+    <a routerLink="/mi-perfil" routerLinkActive="activo">Mi Perfil</a>
     <a *appSoloAdmin routerLink="/dashboard/usuarios" routerLinkActive="activo">Usuarios</a>
     <a *appSoloAdmin routerLink="/dashboard/estadisticas" routerLinkActive="activo">Estadísticas</a>
     <span>{{ usuario.nombreUsuario }}</span>
@@ -13,6 +19,7 @@
     <a routerLink="/registro" routerLinkActive="activo">Registro</a>
     }
 </nav>
+}
 
 <router-outlet />
 

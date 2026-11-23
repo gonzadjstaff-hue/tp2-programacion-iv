@@ -408,6 +408,13 @@ a.volver {
   color: var(--texto-suave);
 }
 
+.pantalla-carga {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--fondo);
+}
+
 .spinner {
   width: 48px;
   height: 48px;
