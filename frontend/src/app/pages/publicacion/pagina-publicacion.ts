@@ -4,12 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Modal } from '../../shared/modal/modal';
+import { TiempoRelativoPipe } from '../../shared/pipes/tiempo-relativo.pipe';
 import { DatosComentario, DatosPublicacion, Publicacion } from '../../shared/publicacion/publicacion';
 import { API_URL, mensajeDeError } from '../../api';
 import { Sesion, Usuario } from '../../services/sesion';
 
 @Component({
-  imports: [DatePipe, ReactiveFormsModule, RouterLink, Modal, Publicacion],
+  imports: [DatePipe, ReactiveFormsModule, RouterLink, Modal, Publicacion, TiempoRelativoPipe],
   selector: 'app-pagina-publicacion',
   templateUrl: './pagina-publicacion.html',
 })

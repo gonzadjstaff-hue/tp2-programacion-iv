@@ -3,12 +3,14 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { Modal } from '../../shared/modal/modal';
+import { RecortarPipe } from '../../shared/pipes/recortar.pipe';
+import { ResaltarDirective } from '../../shared/directivas/resaltar.directive';
 import { DatosComentario, DatosPublicacion, Publicacion } from '../../shared/publicacion/publicacion';
 import { API_URL, mensajeDeError } from '../../api';
 import { Sesion, Usuario } from '../../services/sesion';
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink, Modal, Publicacion],
+  imports: [ReactiveFormsModule, RouterLink, Modal, Publicacion, RecortarPipe, ResaltarDirective],
   selector: 'app-publicaciones',
   styleUrl: './publicaciones.scss',
   templateUrl: './publicaciones.html',

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { sesionGuard } from './services/sesion-guard';
+import { adminGuard } from './services/admin-guard';
 
 export const routes: Routes = [
     {
@@ -35,6 +36,18 @@ export const routes: Routes = [
         canActivate: [sesionGuard],
         loadComponent: () =>
             import('./pages/mi-perfil/mi-perfil').then(m => m.MiPerfil),
+    },
+    {
+        path: 'dashboard/usuarios',
+        canActivate: [sesionGuard, adminGuard],
+        loadComponent: () =>
+            import('./pages/dashboard/usuarios/dashboard-usuarios').then(m => m.DashboardUsuarios),
+    },
+    {
+        path: 'dashboard/estadisticas',
+        canActivate: [sesionGuard, adminGuard],
+        loadComponent: () =>
+            import('./pages/dashboard/estadisticas/dashboard-estadisticas').then(m => m.DashboardEstadisticas),
     },
     { path: '**', redirectTo: 'login' },
 ];

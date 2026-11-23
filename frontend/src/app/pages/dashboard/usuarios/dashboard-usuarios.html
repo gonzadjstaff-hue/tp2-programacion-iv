@@ -1,0 +1,154 @@
+<section class="contenedor ancho">
+    <h1>Usuarios</h1>
+
+    <div class="tabla-contenedor">
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Perfil</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (usuario of usuarios(); track usuario._id) {
+                <tr appResaltar>
+                    <td class="celda-usuario">
+                        @if (usuario.fotoPerfil) {
+                        <img [src]="urlImagen(usuario.fotoPerfil)" appImagenRespaldo alt="Foto de perfil">
+                        }
+                        {{ usuario.nombreUsuario }}
+                    </td>
+                    <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.rol }}</td>
+                    <td>
+                        <span class="estado" [class.deshabilitado]="!usuario.habilitado">
+                            {{ usuario.habilitado ? 'Habilitado' : 'Deshabilitado' }}
+                        </span>
+                    </td>
+                    <td>
+                        @if (usuario._id !== miId) {
+                        <button type="button" [class.secundario]="usuario.habilitado"
+                            (click)="pendiente.set(usuario)">
+                            {{ usuario.habilitado ? 'Deshabilitar' : 'Habilitar' }}
+                        </button>
+                        }
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="6" class="aviso">No hay usuarios.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <form [formGroup]="formulario" (ngSubmit)="crear(inputFoto)">
+        <h2>Crear usuario</h2>
+
+        <div>
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" formControlName="nombre">
+            @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
+            <div class="error">El nombre es obligatorio</div>
+            }
+        </div>
+
+        <div>
+            <label for="apellido">Apellido</label>
+            <input id="apellido" type="text" formControlName="apellido">
+            @if (formulario.get('apellido')?.invalid && formulario.get('apellido')?.touched) {
+            <div class="error">El apellido es obligatorio</div>
+            }
+        </div>
+
+        <div>
+            <label for="nombreUsuario">Nombre de usuario</label>
+            <input id="nombreUsuario" type="text" formControlName="nombreUsuario">
+            @if (formulario.get('nombreUsuario')?.invalid && formulario.get('nombreUsuario')?.touched) {
+            <div class="error">El nombre de usuario es obligatorio</div>
+            }
+        </div>
+
+        <div>
+            <label for="email">Correo electrónico</label>
+            <input id="email" type="email" formControlName="email">
+            @if (formulario.get('email')?.touched) {
+            @if (formulario.get('email')?.hasError('required')) {
+            <div class="error">El correo electrónico es obligatorio</div>
+            } @else if (formulario.get('email')?.hasError('email') || formulario.get('email')?.hasError('pattern')) {
+            <div class="error">Ingresá un correo electrónico válido</div>
+            }
+            }
+        </div>
+
+        <div>
+            <label for="password">Contraseña</label>
+            <input id="password" type="password" formControlName="password">
+            @if (formulario.get('password')?.touched) {
+            @if (formulario.get('password')?.hasError('required')) {
+            <div class="error">La contraseña es obligatoria</div>
+            } @else if (formulario.get('password')?.hasError('minlength')) {
+            <div class="error">La contraseña debe tener al menos 8 caracteres</div>
+            } @else if (formulario.get('password')?.hasError('pattern')) {
+            <div class="error">La contraseña debe contener una mayúscula y un número</div>
+            }
+            }
+        </div>
+
+        <div>
+            <label for="repetirPassword">Repetir contraseña</label>
+            <input id="repetirPassword" type="password" formControlName="repetirPassword">
+            @if (formulario.get('repetirPassword')?.touched) {
+            @if (formulario.get('repetirPassword')?.hasError('required')) {
+            <div class="error">Debés repetir la contraseña</div>
+            } @else if (formulario.get('repetirPassword')?.value !== formulario.get('password')?.value) {
+            <div class="error">Las contraseñas no coinciden</div>
+            }
+            }
+        </div>
+
+        <div>
+            <label for="fechaNacimiento">Fecha de nacimiento</label>
+            <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento">
+            @if (formulario.get('fechaNacimiento')?.invalid && formulario.get('fechaNacimiento')?.touched) {
+            <div class="error">La fecha de nacimiento es obligatoria</div>
+            }
+        </div>
+
+        <div>
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" formControlName="descripcion"></textarea>
+        </div>
+
+        <div>
+            <label for="fotoPerfil">Foto de perfil</label>
+            <input #inputFoto id="fotoPerfil" type="file" accept="image/jpeg,image/png,image/webp"
+                (change)="seleccionarFoto($event)">
+            @if (formularioEnviado && !fotoSeleccionada) {
+            <div class="error">Debés seleccionar una foto de perfil</div>
+            }
+        </div>
+
+        <fieldset>
+            <legend>Perfil</legend>
+            <label class="opcion"><input type="radio" formControlName="rol" value="usuario"> Usuario</label>
+            <label class="opcion"><input type="radio" formControlName="rol" value="administrador"> Administrador</label>
+        </fieldset>
+
+        <button type="submit">Crear usuario</button>
+    </form>
+</section>
+
+<app-modal [mensaje]="mensajeConfirmacion()" [visible]="pendiente() !== null" [pedirConfirmacion]="true"
+    [textoConfirmar]="pendiente()?.habilitado ? 'Deshabilitar' : 'Habilitar'" (cerrado)="pendiente.set(null)"
+    (confirmado)="confirmarCambio()">
+</app-modal>
+
+<app-modal [mensaje]="mensajeModal()" [visible]="mensajeModal() !== ''" (cerrado)="mensajeModal.set('')">
+</app-modal>

@@ -45,8 +45,8 @@
     @if (comentarios()[publicacion._id]; as resumen) {
     <div class="comentarios">
         @for (comentario of resumen.lista; track comentario._id) {
-        <p>
-            <strong>{{ comentario.usuario?.nombreUsuario ?? 'Usuario eliminado' }}</strong>: {{ comentario.mensaje }}
+        <p appResaltar>
+            <strong>{{ comentario.usuario?.nombreUsuario ?? 'Usuario eliminado' }}</strong>: {{ comentario.mensaje | recortar: 100 }}
             @if (comentario.modificado) {
             <small>(editado)</small>
             }

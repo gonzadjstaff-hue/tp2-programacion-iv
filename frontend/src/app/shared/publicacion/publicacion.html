@@ -1,11 +1,12 @@
 <article class="publicacion">
     <header>
         @if (publicacion.usuario?.fotoPerfil) {
-        <img class="avatar" [src]="urlImagen(publicacion.usuario.fotoPerfil)" alt="Foto de perfil">
+        <img class="avatar" [src]="urlImagen(publicacion.usuario.fotoPerfil)" appImagenRespaldo
+            alt="Foto de perfil">
         }
         <div>
             <strong>{{ publicacion.usuario?.nombreUsuario ?? 'Usuario eliminado' }}</strong>
-            <small>{{ publicacion.createdAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+            <small [title]="publicacion.createdAt | date: 'dd/MM/yyyy HH:mm'">{{ publicacion.createdAt | tiempoRelativo }}</small>
         </div>
     </header>
 

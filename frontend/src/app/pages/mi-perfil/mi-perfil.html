@@ -2,13 +2,13 @@
     @if (usuario) {
     <div class="perfil">
         @if (usuario.fotoPerfil) {
-        <img class="foto" [src]="urlImagen(usuario.fotoPerfil)" alt="Foto de perfil">
+        <img class="foto" [src]="urlImagen(usuario.fotoPerfil)" appImagenRespaldo alt="Foto de perfil">
         }
         <div>
             <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
             <p class="usuario">&#64;{{ usuario.nombreUsuario }} · {{ usuario.rol }}</p>
             <p>{{ usuario.email }}</p>
-            <p>Fecha de nacimiento: {{ fechaNacimiento() }}</p>
+            <p>Fecha de nacimiento: {{ fechaNacimiento() }} ({{ usuario.fechaNacimiento | edad }})</p>
             @if (usuario.descripcion) {
             <p>{{ usuario.descripcion }}</p>
             }
@@ -72,7 +72,7 @@
         @for (comentario of comentarios()[publicacion._id]; track comentario._id) {
         <p>
             <strong>{{ comentario.usuario?.nombreUsuario }}</strong>: {{ comentario.mensaje }}
-            <small>{{ comentario.createdAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+            <small>{{ comentario.createdAt | tiempoRelativo }}</small>
         </p>
         } @empty {
         <p class="aviso">Sin comentarios.</p>

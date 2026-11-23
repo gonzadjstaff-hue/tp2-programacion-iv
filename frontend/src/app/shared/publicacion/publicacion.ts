@@ -3,6 +3,8 @@ import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { Modal } from '../modal/modal';
+import { TiempoRelativoPipe } from '../pipes/tiempo-relativo.pipe';
+import { ImagenRespaldoDirective } from '../directivas/imagen-respaldo.directive';
 import { API_URL, mensajeDeError, urlImagen } from '../../api';
 import { Sesion, Usuario } from '../../services/sesion';
 
@@ -26,7 +28,7 @@ export interface DatosComentario {
 }
 
 @Component({
-  imports: [DatePipe, RouterLink, Modal],
+  imports: [DatePipe, RouterLink, Modal, TiempoRelativoPipe, ImagenRespaldoDirective],
   selector: 'app-publicacion',
   styleUrl: './publicacion.scss',
   templateUrl: './publicacion.html',

@@ -1,9 +1,11 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Modal } from '../../shared/modal/modal';
+import { EdadPipe } from '../../shared/pipes/edad.pipe';
+import { TiempoRelativoPipe } from '../../shared/pipes/tiempo-relativo.pipe';
+import { ImagenRespaldoDirective } from '../../shared/directivas/imagen-respaldo.directive';
 import { DatosPublicacion, Publicacion } from '../../shared/publicacion/publicacion';
 import { API_URL, mensajeDeError, urlImagen } from '../../api';
 import { Sesion, Usuario } from '../../services/sesion';
@@ -16,7 +18,7 @@ interface Comentario {
 }
 
 @Component({
-  imports: [DatePipe, ReactiveFormsModule, RouterLink, Modal, Publicacion],
+  imports: [ReactiveFormsModule, RouterLink, Modal, Publicacion, EdadPipe, TiempoRelativoPipe, ImagenRespaldoDirective],
   selector: 'app-mi-perfil',
   styleUrl: './mi-perfil.scss',
   templateUrl: './mi-perfil.html',

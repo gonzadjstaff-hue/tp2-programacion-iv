@@ -1,0 +1,81 @@
+.ancho {
+    max-width: 960px;
+}
+
+.tabla-contenedor {
+    overflow-x: auto;
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th,
+td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--borde);
+}
+
+th {
+    color: var(--texto-suave);
+    font-size: 13px;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.celda-usuario {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+.estado {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 12px;
+    font-weight: 600;
+
+    &.deshabilitado {
+        background: #fee2e2;
+        color: var(--error);
+    }
+}
+
+td button {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+fieldset {
+    margin: 0 0 16px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+}
+
+.opcion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 400;
+
+    input {
+        width: auto;
+    }
+}

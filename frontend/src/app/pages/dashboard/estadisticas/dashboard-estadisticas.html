@@ -1,0 +1,32 @@
+<section class="contenedor ancho">
+    <h1>Estadísticas</h1>
+
+    @for (grafico of graficos; track grafico.ruta; let indice = $index) {
+    <article class="grafico">
+        <h2>{{ grafico.titulo }}</h2>
+
+        <form class="rango" [formGroup]="grafico.rango" (ngSubmit)="cargar(grafico, indice)">
+            <div>
+                <label [for]="'desde' + indice">Desde</label>
+                <input [id]="'desde' + indice" type="date" formControlName="desde">
+            </div>
+            <div>
+                <label [for]="'hasta' + indice">Hasta</label>
+                <input [id]="'hasta' + indice" type="date" formControlName="hasta">
+            </div>
+            <button type="submit">Actualizar</button>
+        </form>
+
+        @if (grafico.vacio()) {
+        <p class="aviso">No hay datos en el período elegido.</p>
+        }
+
+        <div class="lienzo" [class.pie]="grafico.tipo === 'pie'" [hidden]="grafico.vacio()">
+            <canvas #lienzo></canvas>
+        </div>
+    </article>
+    }
+</section>
+
+<app-modal [mensaje]="mensajeModal()" [visible]="mensajeModal() !== ''" (cerrado)="mensajeModal.set('')">
+</app-modal>

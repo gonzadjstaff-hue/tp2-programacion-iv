@@ -4,6 +4,8 @@
     <a routerLink="/mi-perfil" routerLinkActive="activo">Mi Perfil</a>
 
     @if (sesion.obtener(); as usuario) {
+    <a *appSoloAdmin routerLink="/dashboard/usuarios" routerLinkActive="activo">Usuarios</a>
+    <a *appSoloAdmin routerLink="/dashboard/estadisticas" routerLinkActive="activo">Estadísticas</a>
     <span>{{ usuario.nombreUsuario }}</span>
     <button type="button" (click)="cerrarSesion()">Cerrar sesión</button>
     } @else {
