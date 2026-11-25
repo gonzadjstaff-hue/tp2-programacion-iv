@@ -19,8 +19,11 @@ export const tokenInterceptor: HttpInterceptorFn = (peticion, siguiente) => {
       const esLogin = peticion.url.endsWith('/autenticacion/login');
 
       if (error.status === 401 && !esLogin) {
-        sesion.cerrar();
-        router.navigate(['/login']);
+        if (token) {
+          sesion.expirar();
+        } else {
+          router.navigate(['/login']);
+        }
       }
 
       return throwError(() => error);

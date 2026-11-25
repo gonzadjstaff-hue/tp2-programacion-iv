@@ -27,3 +27,7 @@
     [pedirConfirmacion]="true" textoConfirmar="Extender sesión" (cerrado)="ignorarAviso()"
     (confirmado)="extenderSesion()">
 </app-modal>
+
+<app-modal mensaje="Tu sesión expiró o ya no es válida. Iniciá sesión nuevamente." [visible]="sesion.expirada()"
+    (cerrado)="irAlLogin()">
+</app-modal>

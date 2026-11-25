@@ -25,6 +25,11 @@ export class App {
     });
   }
 
+  irAlLogin() {
+    this.sesion.expirada.set(false);
+    this.router.navigate(['/login']);
+  }
+
   ignorarAviso() {
     this.sesion.avisoExpiracion.set(false);
   }
