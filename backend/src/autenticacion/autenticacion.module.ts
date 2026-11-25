@@ -23,7 +23,7 @@ import { Usuario, UsuarioSchema } from '../usuarios/schemas/usuario.schema';
 
         return {
           secret: process.env.JWT_SECRET,
-          signOptions: { expiresIn: '2m' },
+          signOptions: { expiresIn: '3m' },
         };
       },
     }),
@@ -34,4 +34,4 @@ import { Usuario, UsuarioSchema } from '../usuarios/schemas/usuario.schema';
     { provide: APP_GUARD, useClass: AuthGuard },
   ],
 })
-export class AutenticacionModule {}
+export class AutenticacionModule { }
